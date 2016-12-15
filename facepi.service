@@ -1,0 +1,24 @@
+#!/bin/sh
+ 
+### BEGIN INIT INFO
+# Provides:          facepi
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: start facepi
+# Description:       start facepi
+### END INIT INFO
+export NODE_PATH=/home/pi/FacePi/node_modules 
+case $1 in
+        start)
+               pm2 start /home/pi/FacePi/main.js
+                ;;
+        stop)
+               pm2 stop /home/pi/FacePi/main.js
+				;;
+        *)
+                echo "Usage: $0 (start|stop)"
+                ;;
+esac
+exit 0
