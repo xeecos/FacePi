@@ -19,6 +19,9 @@ exec('ls /dev/video*', (error, stdout, stderr) => {
 		return;
 	}
 	var device = stdout.split("\n").join("");
+	if(device.indexOf("video")<0){
+		return;	
+	}
 	vid = new cv.VideoCapture(device.split("video")[1]*1);
 	vid.setWidth(frameWidth);
 	vid.setHeight(frameHeight);
@@ -49,10 +52,12 @@ function loop(){
 		vid.read(function(err, im){
 			if(err){
 				console.log(err);
+				quit();
 				return;
 			}
-			im.detectObject("data/haarcascade_frontalface_alt.xml", {}, function(err, faces){
+			im.detectObject("/home/pi/FacePi/data/haarcascade_frontalface_alt.xml", {}, function(err, faces){
 				if(err){
+					quit();
 					return;
 				}
 				if(faces){
@@ -80,6 +85,9 @@ function move(faceX,faceY,faceW,faceH){
 	port.write(new Buffer("face,"+Math.round(-faceX)+","+Math.round(faceY)+","+Math.round(faceW)+","+Math.round(faceH)+"\n"));
 }
 process.on("SIGINT",function(){
+	quit();
+});
+function quit(){
 	if(port){
 		port.close();
 	}
@@ -87,4 +95,4 @@ process.on("SIGINT",function(){
 		vid.release();
 	}
 	process.exit();
-});
+}
