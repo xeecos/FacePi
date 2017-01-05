@@ -37,7 +37,7 @@ void loop() {
       parseBuffer();
     }
   }
-  //joystickUpdate();
+  joystickUpdate();
 }
 void parseBuffer(){
   int startIndex = 0,endIndex = 0,index = 0,len = _buffer.length(),maxCmdLen = 0;
